@@ -14,3 +14,25 @@ print("Hello, world!")
 
 let explicitFloat: Float = 4
 
+let label = "The width is "
+let width = 94
+let widthLabel = label + String(width)
+var myVariable = 42
+
+// let widthLabel = label + width
+print(widthLabel)
+
+let apples = 3
+let oranges = 5
+let appleSummary = "I have \(apples) apples."
+let fruitSummary = "I have \(apples + oranges) pieces of fruit"
+print(appleSummary)
+print(fruitSummary)
+
+let fpCalcText = "Floating point calculation: \(explicitFloat * 1.5)"
+print(fpCalcText)
+let name = "Arthur Dent"
+let greeting = "Hello, \(name)!"
+print(greeting)
+
+
