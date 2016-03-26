@@ -35,4 +35,12 @@ let name = "Arthur Dent"
 let greeting = "Hello, \(name)!"
 print(greeting)
 
+// Control Flow
 
+//var optionalName: String? = "Ford Prefect"
+var optionalName: String? = nil
+var greeting2 = "Hello"
+if let yourName = optionalName {
+    greeting2 = "Hello, \(yourName)!"
+}
+print(greeting2)
