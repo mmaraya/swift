@@ -42,5 +42,9 @@ var optionalName: String? = nil
 var greeting2 = "Hello"
 if let yourName = optionalName {
     greeting2 = "Hello, \(yourName)!"
+} else {
+    greeting2 = "Hello, no name!"
 }
 print(greeting2)
+
+
