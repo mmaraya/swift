@@ -76,3 +76,11 @@ for (kind, numbers) in interestingNumbers {
 }
 print("The largest number is a \(largestType) with a value of \(largest)")
 
+// Functions and Closures
+
+func greet(name: String, day: String) -> String {
+    return "Hello \(name), today is \(day)."
+}
+
+print(greet("Bob", day:"Wednesday"))
+
