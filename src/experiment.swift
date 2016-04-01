@@ -78,9 +78,10 @@ print("The largest number is a \(largestType) with a value of \(largest)")
 
 // Functions and Closures
 
-func greet(name: String, day: String) -> String {
-    return "Hello \(name), today is \(day)."
+func greet(name: String, special: String) -> String {
+    return "Hello \(name), today's special is \(special)."
 }
 
-print(greet("Bob", day:"Wednesday"))
+print(greet("Bob", special:"meatballs"))
+
 
