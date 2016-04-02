@@ -84,4 +84,15 @@ func greet(name: String, special: String) -> String {
 
 print(greet("Bob", special:"meatballs"))
 
+// Experiment: write a function that calculates the average of its arguments
+
+func average(numbers: Int...) -> Float {
+    var sum: Float = 0
+    for number in numbers {
+        sum += Float(number)
+    }
+    return (sum / Float(numbers.count))
+}
+
+print("The average of 1,3,5, and 9 is \(average(1,3,5,9))")
 
