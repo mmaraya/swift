@@ -96,3 +96,28 @@ func average(numbers: Int...) -> Float {
 
 print("The average of 1,3,5, and 9 is \(average(1,3,5,9))")
 
+// Rewrite the closure to return zero for all odd numbers.
+
+func hasAnyMatches(list: [Int], condition: (Int) -> Bool) -> Bool {
+    for item in list {
+        print(item)
+        if condition(item) {
+            return true
+        }
+    }
+    return false
+}
+
+func lessThanTen(number: Int) -> Bool {
+    return number.map() < 10
+}
+
+var numbers = [20, 19, 7, 12]
+
+numbers.map({
+    (number: Int) -> Int in
+    let result = 3 * number
+    return result
+})
+
+print("Values: \(numbers), matches: \(hasAnyMatches(numbers, condition: lessThanTen))")
