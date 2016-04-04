@@ -109,15 +109,18 @@ func hasAnyMatches(list: [Int], condition: (Int) -> Bool) -> Bool {
 }
 
 func lessThanTen(number: Int) -> Bool {
-    return number.map() < 10
+    return number < 10
 }
 
 var numbers = [20, 19, 7, 12]
 
-numbers.map({
+let thrice = numbers.map({
     (number: Int) -> Int in
-    let result = 3 * number
-    return result
+    if number % 2 != 0 { 
+        return 0 
+    } else {
+        return number
+    }
 })
 
-print("Values: \(numbers), matches: \(hasAnyMatches(numbers, condition: lessThanTen))")
+print("Values: \(thrice), matches: \(hasAnyMatches(thrice, condition: lessThanTen))")
