@@ -124,3 +124,18 @@ let thrice = numbers.map({
 })
 
 print("Values: \(thrice), matches: \(hasAnyMatches(thrice, condition: lessThanTen))")
+
+// Objects and Classes
+
+class Shape {
+    let polygon = true 
+    var description = "just a shape"
+    var numberOfSides = 0
+    func simpleDescription() -> String {
+        return "A shape with \(numberOfSides) sides"
+    }
+    func longDescription(desc: String) {
+        description = desc
+    }
+}
+
