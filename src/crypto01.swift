@@ -9,6 +9,12 @@
  */
 
 //
+// Constants used throughout this file
+//
+let hex = "0123456789abcdef"
+let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+//
 // Exception types
 //
 enum Parameter: ErrorType {
@@ -16,38 +22,9 @@ enum Parameter: ErrorType {
 }
  
 //
-// Unit test for convertHexToBase64
+// Convert hexadecimal string into an array of bytes
 //
-func testConvertHexToBase64() -> Bool {
-
-    let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
-    let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
-    let result = try! convertHexToBase64(input)
-
-    return (result == output)
-}
-
-//
-// Convert hexadecimal characters into a Base64 encoded string
-//
-// https://cryptopals.com/sets/1/challenges/1 -- Convert hex to base64
-//
-// The string:
-// 49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d
-// Should produce:
-// SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
-//
-func convertHexToBase64(input: String) throws -> String {
-
-    let hex = "0123456789abcdef"
-    let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-   
-    var result = ""
-
-    // an empty input string produces an empty Base64 string
-    guard !input.isEmpty else {
-        return result
-    }
+func convertHexToBytes(input: String) throws -> [UInt8] {
 
     // input string should have an even number of characters
     guard (input.characters.count % 2 == 0) else {
@@ -62,6 +39,37 @@ func convertHexToBase64(input: String) throws -> String {
     }
 
     // extract raw bytes from input
+    var bytes = [UInt8](count: input.characters.count / 2, repeatedValue: 0)
+    var index = input.startIndex
+    for _ in 1...(input.characters.count / 2) {
+        var digit = String(input[index]) + String(input[index.successor()])
+        index = index.successor().successor()
+    }
+
+
+    return bytes
+}
+
+//
+// Convert hexadecimal characters into a Base64 encoded string
+//
+// https://cryptopals.com/sets/1/challenges/1 -- Convert hex to base64
+//
+// The string:
+// 49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d
+// Should produce:
+// SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
+//
+func convertHexToBase64(input: String) throws -> String {
+
+    // an empty input string produces an empty Base64 string
+    guard !input.isEmpty else {
+        return ""
+    }
+
+    let bytes = try! convertHexToBytes(input)
+
+    var result = ""
 
     // for each 6-bit chunk
 
@@ -70,6 +78,20 @@ func convertHexToBase64(input: String) throws -> String {
         // add encoded character to result
 
     return result
+}
+
+//
+// Unit test for convertHexToBase64
+//
+func testConvertHexToBase64() -> Bool {
+
+    let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
+    let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
+
+    // for this unit test, the input is valid so we don't have to catch the exception
+    let result = try! convertHexToBase64(input)
+
+    return (result == output)
 }
 
 print("Challenge 01 (Convert Hex to Base64)\t... \(testConvertHexToBase64() ? "passed" : "failed")")
