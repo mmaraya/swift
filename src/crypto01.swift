@@ -18,7 +18,9 @@ let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 // Exception types
 //
 enum Parameter: ErrorType {
-    case Invalid
+    case InvalidHexCharacterCount
+    case InvalidHexCharacter(char: Character)
+    case InvalidHexString(str: String)
 }
  
 //
@@ -28,25 +30,30 @@ func convertHexToBytes(input: String) throws -> [UInt8] {
 
     // input string should have an even number of characters
     guard (input.characters.count % 2 == 0) else {
-        throw Parameter.Invalid
+        throw Parameter.InvalidHexCharacterCount
     }
 
     // input string should only have hexadecimal characters
     for char in input.lowercaseString.characters {
         guard hex.characters.contains(char) else {
-            throw Parameter.Invalid
+            throw Parameter.InvalidHexCharacter(char: char)
         }
     }
 
     // extract raw bytes from input
     var bytes = [UInt8](count: input.characters.count / 2, repeatedValue: 0)
     var index = input.startIndex
-    for _ in 1...(input.characters.count / 2) {
-        var digit = String(input[index]) + String(input[index.successor()])
+    for i in 1...(input.characters.count / 2) {
+        var str = String(input[index]) + String(input[index.successor()])
+        if let digit = UInt8(str, radix: 16) {
+            bytes[i-1] = digit
+        } else {
+            throw Parameter.InvalidHexString(str: str)
+        }
         index = index.successor().successor()
     }
 
-
+    print (bytes)
     return bytes
 }
 
@@ -67,7 +74,7 @@ func convertHexToBase64(input: String) throws -> String {
         return ""
     }
 
-    let bytes = try! convertHexToBytes(input)
+    let bytes = try? convertHexToBytes(input)
 
     var result = ""
 
