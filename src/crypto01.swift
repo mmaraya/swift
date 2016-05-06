@@ -12,7 +12,7 @@
 // Constants used throughout this file
 //
 let hex = "0123456789abcdef"
-let base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+let base64 = [Character]("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".characters)
 
 //
 // Exception types
@@ -26,7 +26,7 @@ enum Parameter: ErrorType {
 //
 // Convert hexadecimal string into an array of bytes
 //
-func convertHexToBytes(input: String) throws -> [UInt8] {
+func convertHexToBytes(input: String) throws -> [Int] {
 
     // input string should have an even number of characters
     guard (input.characters.count % 2 == 0) else {
@@ -41,20 +41,19 @@ func convertHexToBytes(input: String) throws -> [UInt8] {
     }
 
     // extract raw bytes from input
-    var bytes = [UInt8](count: input.characters.count / 2, repeatedValue: 0)
+    var result = [Int](count: input.characters.count / 2, repeatedValue: 0)
     var index = input.startIndex
     for i in 1...(input.characters.count / 2) {
-        var str = String(input[index]) + String(input[index.successor()])
-        if let digit = UInt8(str, radix: 16) {
-            bytes[i-1] = digit
+        let str = String(input[index]) + String(input[index.successor()])
+        if let digit = Int(str, radix: 16) {
+            result[i-1] = digit
         } else {
             throw Parameter.InvalidHexString(str: str)
         }
         index = index.successor().successor()
     }
 
-    print (bytes)
-    return bytes
+    return result
 }
 
 //
@@ -69,20 +68,29 @@ func convertHexToBytes(input: String) throws -> [UInt8] {
 //
 func convertHexToBase64(input: String) throws -> String {
 
-    // an empty input string produces an empty Base64 string
-    guard !input.isEmpty else {
-        return ""
-    }
-
-    let bytes = try? convertHexToBytes(input)
-
     var result = ""
 
-    // for each 6-bit chunk
+    // an empty input string produces an empty Base64 string
+    guard !input.isEmpty else {
+        return result
+    }
 
-        // map 6-bit chunk to Base64 index table
+    // convert input string to byte array
+    let bytes = try! convertHexToBytes(input)
 
-        // add encoded character to result
+    // for each 3-byte segment, map to 4 Base64 characters
+    for i in 0...(bytes.count / 3 - 1) {
+        var index = bytes[i*3] >> 2
+        result += String(base64[index])
+        index = ((bytes[i*3] & 0x03) << 4) | (bytes[i*3+1] >> 4)
+        result += String(base64[index])
+        index = ((bytes[i*3+1] & 0x0F) << 2) | ((bytes[i*3+2] & 0xC0) >> 6)
+        result += String(base64[index])
+        index = bytes[i*3+2] & 0x3F
+        result += String(base64[index])
+    }
+
+    // pad output with trailing "=" characters
 
     return result
 }
@@ -97,6 +105,8 @@ func testConvertHexToBase64() -> Bool {
 
     // for this unit test, the input is valid so we don't have to catch the exception
     let result = try! convertHexToBase64(input)
+    
+    print("expected\t\(output)\noutput\t\t\(result)")
 
     return (result == output)
 }
