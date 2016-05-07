@@ -76,7 +76,7 @@ func convertHexToBase64(input: String) throws -> String {
     }
 
     // convert input string to byte array
-    let bytes = try! convertHexToBytes(input)
+    let bytes = try convertHexToBytes(input)
 
     // for each 3-byte segment, map to 4 Base64 characters
     for i in 0...(bytes.count / 3 - 1) {
@@ -98,18 +98,17 @@ func convertHexToBase64(input: String) throws -> String {
 //
 // Unit test for convertHexToBase64
 //
-func testConvertHexToBase64() -> Bool {
+func testConvertHexToBase64() throws -> Bool {
 
     let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
     let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
 
-    // for this unit test, the input is valid so we don't have to catch the exception
-    let result = try! convertHexToBase64(input)
+    let result = try convertHexToBase64(input)
     
     print("expected\t\(output)\noutput\t\t\(result)")
 
     return (result == output)
 }
 
-print("Challenge 01 (Convert Hex to Base64)\t... \(testConvertHexToBase64() ? "passed" : "failed")")
+print("Challenge 01 (Convert Hex to Base64)\t... \(try testConvertHexToBase64() ? "passed" : "failed")")
 
