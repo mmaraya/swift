@@ -90,8 +90,25 @@ func convertHexToBase64(input: String) throws -> String {
         result += String(base64[index])
     }
 
-    // pad output with trailing "=" characters
+/*
+        if bytes.count % 3 == 2 {
+        var index = bytes[bytes.endIndex - 2] >> 2
+        result += String(base64[index])
+        index = ((bytes[bytes.endIndex - 2] & 0x03) << 4) | (bytes[bytes.endIndex - 1] >> 4)
+        result += String(base64[index])
+        index = (bytes[bytes.endIndex - 1] & 0x0F) << 2
+        result += String(base64[index])
+        result += "="
+    }
 
+    if bytes.count % 3 == 1 {
+        var index = bytes[bytes.endIndex - 1] >> 2
+        result += String(base64[index])
+        index = bytes[bytes.endIndex - 1] << 6
+        result += String(base64[index])
+        result += "=="
+    }
+*/
     return result
 }
 
@@ -100,14 +117,24 @@ func convertHexToBase64(input: String) throws -> String {
 //
 func testConvertHexToBase64() throws -> Bool {
 
-    let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
-    let output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
+    let tests: [String: String] = [
+        "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d":
+            "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t",
+        "4d616e": "TWFu",
+        "4d61": "TWE=",
+        "4d": "TQ==",
+    ]
 
-    let result = try convertHexToBase64(input)
-    
-    print("expected\t\(output)\noutput\t\t\(result)")
+    var retval = true
+    for (input, output) in tests {
+        let result = try convertHexToBase64(input)
+        print("expected\t\(output)\noutput\t\t\(result)")
+        if result != output {
+            retval = false
+        }
+    }
 
-    return (result == output)
+    return retval
 }
 
 print("Challenge 01 (Convert Hex to Base64)\t... \(try testConvertHexToBase64() ? "passed" : "failed")")
