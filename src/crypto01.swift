@@ -57,6 +57,40 @@ func convertHexToBytes(input: String) throws -> [Int] {
 }
 
 //
+// Convert array of bytes to Base64
+//
+func convertBytesToBase64(bytes: [Int]) -> String {
+
+    var result = ""
+
+    if bytes.count == 1 {
+        result += String(base64[bytes[0] >> 2])
+        result += String(base64[(bytes[0] & 0x03) << 4])
+        result += "=="
+    }
+
+    if bytes.count == 2 {
+        result += String(base64[bytes[0] >> 2])
+        result += String(base64[((bytes[0] & 0x03) << 4) | (bytes[1] >> 4)])
+        result += String(base64[(bytes[1] & 0x0F) << 2])
+        result += "="
+    }
+
+    if bytes.count == 3 {
+        result += String(base64[bytes[0] >> 2])
+        result += String(base64[((bytes[0] & 0x03) << 4) | (bytes[1] >> 4)])
+        result += String(base64[((bytes[1] & 0x0F) << 2) | ((bytes[2] & 0xC0) >> 6)])
+        result += String(base64[bytes[2] & 0x3F])
+    }
+
+    if bytes.count > 3 {
+        result = convertBytesToBase64(Array(bytes[0...2])) + convertBytesToBase64(Array(bytes[3..<bytes.endIndex]))
+    }
+
+    return result
+}
+
+//
 // Convert hexadecimal characters into a Base64 encoded string
 //
 // https://cryptopals.com/sets/1/challenges/1 -- Convert hex to base64
@@ -68,48 +102,16 @@ func convertHexToBytes(input: String) throws -> [Int] {
 //
 func convertHexToBase64(input: String) throws -> String {
 
-    var result = ""
-
     // an empty input string produces an empty Base64 string
     guard !input.isEmpty else {
-        return result
+        return ""
     }
 
     // convert input string to byte array
     let bytes = try convertHexToBytes(input)
 
-    // for each 3-byte segment, map to 4 Base64 characters
-    for i in 0...(bytes.count / 3 - 1) {
-        var index = bytes[i*3] >> 2
-        result += String(base64[index])
-        index = ((bytes[i*3] & 0x03) << 4) | (bytes[i*3+1] >> 4)
-        result += String(base64[index])
-        index = ((bytes[i*3+1] & 0x0F) << 2) | ((bytes[i*3+2] & 0xC0) >> 6)
-        result += String(base64[index])
-        index = bytes[i*3+2] & 0x3F
-        result += String(base64[index])
-    }
-
-/*
-        if bytes.count % 3 == 2 {
-        var index = bytes[bytes.endIndex - 2] >> 2
-        result += String(base64[index])
-        index = ((bytes[bytes.endIndex - 2] & 0x03) << 4) | (bytes[bytes.endIndex - 1] >> 4)
-        result += String(base64[index])
-        index = (bytes[bytes.endIndex - 1] & 0x0F) << 2
-        result += String(base64[index])
-        result += "="
-    }
-
-    if bytes.count % 3 == 1 {
-        var index = bytes[bytes.endIndex - 1] >> 2
-        result += String(base64[index])
-        index = bytes[bytes.endIndex - 1] << 6
-        result += String(base64[index])
-        result += "=="
-    }
-*/
-    return result
+    // convert byte arry to Base64
+    return convertBytesToBase64(bytes)
 }
 
 //
@@ -123,6 +125,7 @@ func testConvertHexToBase64() throws -> Bool {
         "4d616e": "TWFu",
         "4d61": "TWE=",
         "4d": "TQ==",
+        "": "",
     ]
 
     var retval = true
