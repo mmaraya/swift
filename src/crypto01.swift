@@ -95,11 +95,6 @@ func convertBytesToBase64(bytes: [Int]) -> String {
 //
 // https://cryptopals.com/sets/1/challenges/1 -- Convert hex to base64
 //
-// The string:
-// 49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d
-// Should produce:
-// SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t
-//
 func convertHexToBase64(input: String) throws -> String {
 
     // an empty input string produces an empty Base64 string
