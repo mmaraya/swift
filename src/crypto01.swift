@@ -134,6 +134,3 @@ func testConvertHexToBase64() throws -> Bool {
 
     return retval
 }
-
-print("Challenge 01 (Convert Hex to Base64)\t... \(try testConvertHexToBase64() ? "passed" : "failed")")
-

@@ -30,6 +30,3 @@ func testFixedXor() -> Bool {
     print("expected\t\(test.output)\noutput\t\t\(result)")
     return result == test.output 
 }
-
-print("Challenge 02 (XOR Two Equal-Length Buffers)\t... \(testFixedXor() ? "passed" : "failed")")
-
