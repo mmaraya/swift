@@ -126,7 +126,6 @@ func testConvertHexToBase64() throws -> Bool {
     var retval = true
     for (input, output) in tests {
         let result = try convertHexToBase64(input)
-        print("expected\t\(output)\noutput\t\t\(result)")
         if result != output {
             retval = false
         }
