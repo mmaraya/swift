@@ -27,6 +27,5 @@ func testFixedXor() -> Bool {
     )
 
     let result = fixedXor(test.input1, input2: test.input2)
-    print("expected\t\(test.output)\noutput\t\t\(result)")
     return result == test.output 
 }
