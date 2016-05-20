@@ -11,14 +11,24 @@
 //
 // Return the exclusive-or for two equal-length buffers
 //
-func fixedXor(input1: String, input2: String) -> String {
-    return ""
+func fixedXor(input1: String, input2: String) throws -> String {
+
+    let a = try convertHexToBytes(input1)
+    let b = try convertHexToBytes(input2)
+
+    var result = ""
+
+    for i in 0..<a.endIndex {
+        result += String(a[i] ^ b[i], radix: 16)
+    }
+
+    return result
 }
 
 //
 // Unit test for fixedXor
 //
-func testFixedXor() -> Bool {
+func testFixedXor() throws -> Bool {
 
     let test = (
         input1: "1c0111001f010100061a024b53535009181c",
@@ -26,6 +36,6 @@ func testFixedXor() -> Bool {
         output: "746865206b696420646f6e277420706c6179"
     )
 
-    let result = fixedXor(test.input1, input2: test.input2)
+    let result = try fixedXor(test.input1, input2: test.input2)
     return result == test.output 
 }
