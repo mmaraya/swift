@@ -11,10 +11,16 @@
 //
 // Return the exclusive-or for two equal-length buffers
 //
-func fixedXor(input1: String, input2: String) throws -> String {
+func fixedXor(str1: String, str2: String) throws -> String {
 
-    let a = try convertHexToBytes(input1)
-    let b = try convertHexToBytes(input2)
+    // input strings must be of equal length
+    guard str1.characters.count == str2.characters.count else {
+        throw Parameter.MismatchingLengths(str1: str1, len1: str1.characters.count,
+                                            str2: str2, len2: str2.characters.count)
+    }
+
+    let a = try convertHexToBytes(str1)
+    let b = try convertHexToBytes(str2)
 
     var result = ""
 
@@ -36,6 +42,6 @@ func testFixedXor() throws -> Bool {
         output: "746865206b696420646f6e277420706c6179"
     )
 
-    let result = try fixedXor(test.input1, input2: test.input2)
+    let result = try fixedXor(test.input1, str2: test.input2)
     return result == test.output 
 }

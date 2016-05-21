@@ -21,6 +21,7 @@ enum Parameter: ErrorType {
     case InvalidHexCharacterCount
     case InvalidHexCharacter(char: Character)
     case InvalidHexString(str: String)
+    case MismatchingLengths(str1: String, len1: Int, str2: String, len2: Int)
 }
  
 //
