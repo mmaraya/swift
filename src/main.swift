@@ -10,4 +10,4 @@
 
 print("Challenge 01 (Convert Hex to Base64)\t\t... \(try testConvertHexToBase64() ? "passed" : "failed")")
 print("Challenge 02 (XOR Two Equal-Length Buffers)\t... \(try testFixedXor() ? "passed" : "failed")")
-
+print("Challenge 03 (Single-byte XOR cipher)\t\t... \(try testFindAndDecrypt() ? "passed" : "failed")")
