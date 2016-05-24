@@ -16,9 +16,19 @@ func findAndDecrypt(str: String) throws -> String {
     let frequent = [Character]("ETAOINSHRDLU".characters)
     let a = try convertHexToBytes(str)
 
-    // try all possible values for the cipher and count letter frequency
-    for i in 0..<255 {
-    }    
+    // count letter frequency
+    var freq = [Character: Int]()
+    for i in 0..<a.count {
+        let char = Character(UnicodeScalar(a[i]))
+        if let count = freq[char] {
+            freq[char] = count + 1
+        } else {
+            freq[char] = 1
+        }
+    }
+
+    print ("Frequency counts: \(freq)")
+
     return ""
 }
 
