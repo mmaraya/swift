@@ -26,8 +26,14 @@ func findAndDecrypt(str: String) throws -> String {
             freq[char] = 1
         }
     }
-
-    print ("Frequency counts: \(freq)")
+    // sort by frequency count descending
+    for (k,v) in (Array(freq).sort {$0.1 > $1.1}) {
+        // try the most frequent letters in English
+        for i in 0..<frequent.count {
+            // derive a candidate cipher 
+            let cipher = Int(String(k))! ^ Int(String(frequent[i]))!
+        }
+    }
 
     return ""
 }
