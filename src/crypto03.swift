@@ -14,18 +14,18 @@
 func findAndDecrypt(str: String) throws -> String {
 
     let frequent = [Character]("ETAOINSHRDLU".characters)
-    let a = try convertHexToBytes(str)
+    let b = try convertHexToBytes(str)
 
-    // count letter frequency
-    var freq = [Character: Int]()
-    for i in 0..<a.count {
-        let char = Character(UnicodeScalar(a[i]))
-        if let count = freq[char] {
-            freq[char] = count + 1
+    // count integer frequency
+    var freq = [Int: Int]()
+    for i in 0..<b.count {
+        if let count = freq[b[i]] {
+            freq[b[i]] = count + 1
         } else {
-            freq[char] = 1
+            freq[b[i]] = 1
         }
     }
+
     // sort by frequency count descending
     for (k,v) in (Array(freq).sort {$0.1 > $1.1}) {
         // try the most frequent letters in English
