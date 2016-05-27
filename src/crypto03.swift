@@ -13,29 +13,36 @@
 //
 func findAndDecrypt(str: String) throws -> String {
 
-    let frequent = [Character]("ETAOINSHRDLU".characters)
-    let b = try convertHexToBytes(str)
+    var result = ""
+    let bytes = try convertHexToBytes(str)
 
     // count integer frequency
     var freq = [Int: Int]()
-    for i in 0..<b.count {
-        if let count = freq[b[i]] {
-            freq[b[i]] = count + 1
+    for i in 0..<bytes.count {
+        if let count = freq[bytes[i]] {
+            freq[bytes[i]] = count + 1
         } else {
-            freq[b[i]] = 1
+            freq[bytes[i]] = 1
         }
     }
 
-    // sort by frequency count descending
+    // sort by descending frequency
     for (k,v) in (Array(freq).sort {$0.1 > $1.1}) {
         // try the most frequent letters in English
-        for i in 0..<frequent.count {
+        let frequent = "ETAOINSHRDLU"
+        for f in frequent.utf8 {
             // derive a candidate cipher 
-            let cipher = Int(String(k))! ^ Int(String(frequent[i]))!
+            let cipher = UInt8(k) ^ f
+            // apply cipher to ciphertext
+            for b in bytes {
+                result.append(Character(UnicodeScalar(UInt8(b) ^ cipher)))
+            }
+            print("\(result)")
+            result = ""
         }
     }
 
-    return ""
+    return result
 }
 
 //
